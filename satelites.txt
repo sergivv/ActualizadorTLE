@@ -1,0 +1,21 @@
+# Lista de satélites para Orbitron
+# Formato: NOMBRE_PERSONALIZADO, NORAD_ID
+# ============================================
+
+FOX-1B (AO-91), 43017
+ASRTU-1 (AO-123), 61781
+ISS (ZARYA), 25544
+SAUDISAT 1C (SO-50), 27607
+UMKA-1 (RS40S), 57172
+SAKHACUBE-CHOLBON (RS18S), 67290
+
+# Puedes añadir más satélites aquí abajo (elimina el #)
+#TEVEL2-1, 63217
+#TEVEL2-2, 63218
+#TEVEL2-3, 63219
+#TEVEL2-4, 63213
+#TEVEL2-5, 63214
+#TEVEL2-6, 63215
+#TEVEL2-7, 63238
+#TEVEL2-8, 63239
+#TEVEL2-9, 63237

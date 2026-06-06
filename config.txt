@@ -1,0 +1,15 @@
+# Configuración del actualizador de TLEs
+# ======================================
+
+# Ruta del ejecutable de Orbitron
+ORBITRON_PATH = C:\Radio\Orbitron\Orbitron.exe
+
+# Ruta donde se guardará el archivo TLE generado
+TLE_OUTPUT = mis_satelites.txt
+
+# Esperar a que Orbitron se cierre para terminar el script?
+# true = espera, false = no espera
+WAIT_FOR_CLOSE = false
+
+# Horas de cache de los TLE descargados
+HORAS_CACHE = 6
