@@ -191,7 +191,8 @@ def _epoca_tle(linea1):
         # Formato: AADDD.DDDDDDDD (AA=año, DDD=día del año)
         epoca_str = linea1[18:32].strip()
         anio = int(epoca_str[:2])
-        # Años >= 57 son 1900s, el resto 2000s (estándar TLE)
+        # Estándar TLE: años 57-99 → 1957-1999 (Sputnik fue el primer satélite, 1957)
+        #               años 00-56 → 2000-2056
         anio_completo = 1900 + anio if anio >= 57 else 2000 + anio
         dia = float(epoca_str[2:])
         return anio_completo * 1000 + dia
@@ -199,6 +200,9 @@ def _epoca_tle(linea1):
         return 0
 
 def parsear_tles(datos_completos):
+    """Parsea todos los TLEs una sola vez y devuelve un dict {norad_str: (linea1, linea2)}.
+    Si un NORAD aparece duplicado, conserva el TLE más reciente según su época.
+    """
     tles = {}
     lineas = datos_completos.splitlines()
 
