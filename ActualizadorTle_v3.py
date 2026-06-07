@@ -184,28 +184,38 @@ def _descargar_todos_los_tles():
 
 # ---- TLEs ----------------------------------------------------------------
 
-def parsear_tles(datos_completos):
-    """Parsea todos los TLEs una sola vez y devuelve un dict {norad_str: (linea1, linea2)}.
+def _epoca_tle(linea1):
+    """Extrae la época del TLE como número comparable (año * 1000 + día)."""
+    try:
+        # La época está en las posiciones [18:32] de la línea 1
+        # Formato: AADDD.DDDDDDDD (AA=año, DDD=día del año)
+        epoca_str = linea1[18:32].strip()
+        anio = int(epoca_str[:2])
+        # Años >= 57 son 1900s, el resto 2000s (estándar TLE)
+        anio_completo = 1900 + anio if anio >= 57 else 2000 + anio
+        dia = float(epoca_str[2:])
+        return anio_completo * 1000 + dia
+    except (ValueError, IndexError):
+        return 0
 
-    Formato TLE (3LE):
-        Línea 0: nombre del satélite
-        Línea 1: empieza con '1 ', NORAD en posiciones [2:7]
-        Línea 2: empieza con '2 '
-    """
+def parsear_tles(datos_completos):
     tles = {}
     lineas = datos_completos.splitlines()
 
     for i in range(len(lineas) - 1):
-        linea = lineas[i]
-        if linea.startswith('1 ') and len(linea) >= 7:
-            norad_str = linea[2:7].strip()
-            siguiente  = lineas[i + 1]
-            if siguiente.startswith('2 '):
-                tles[norad_str] = (linea.strip(), siguiente.strip())
+        linea1 = lineas[i]
+        if linea1.startswith('1 ') and len(linea1) >= 7:
+            norad_str = linea1[2:7].strip()
+            linea2 = lineas[i + 1]
+            if (linea2.startswith('2 ') and
+                len(linea2) >= 7 and
+                linea2[2:7].strip() == norad_str):
+                # Solo guardar si es más reciente que el que ya tenemos
+                if norad_str not in tles or _epoca_tle(linea1) > _epoca_tle(tles[norad_str][0]):
+                    tles[norad_str] = (linea1.strip(), linea2.strip())
 
     print(f"✓ Parseados {len(tles):,} TLEs en memoria")
     return tles
-
 
 def buscar_tle(tle_dict, norad_id):
     """Busca un satélite por NORAD ID. Devuelve (linea1, linea2) o None."""
